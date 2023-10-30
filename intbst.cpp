@@ -36,9 +36,7 @@ bool IntBST::insert(int value) {
         root = new Node(value);
         return true;
     }
-    Node* curr = root;
     return insert(value, root);
-    
 }
 
 // recursive helper for insert (assumes n is never 0)
@@ -215,6 +213,7 @@ int IntBST::getSuccessor(int value) const{
     return succNode ? succNode->info : 0;
 }
 
+/*
 // deletes the Node containing the given value from the tree
 // returns true if the node exist and was deleted or false if the node does not exist
 bool IntBST::remove(int value){
@@ -241,6 +240,53 @@ bool IntBST::remove(int value){
         if (temp->parent->left == temp) temp->parent->left = tempChild;
         else temp->parent->right = tempChild;
         if (tempChild) tempChild->parent = temp->parent;
+        delete temp;
+    }
+
+    return true;
+}
+*/
+bool IntBST::remove(int value) {
+    Node* target = getNodeFor(value, root);
+    if (!target) return false;
+
+    // Node with only one child or no child
+    if (!target->left || !target->right) {
+        Node* child = target->left ? target->left : target->right;
+
+        // If target is the root
+        if (!target->parent) {
+            root = child;
+        } else {
+            if (target == target->parent->left) {
+                target->parent->left = child;
+            } else {
+                target->parent->right = child;
+            }
+        }
+
+        if (child) {
+            child->parent = target->parent;
+        }
+        delete target;
+    } 
+    // Node with two children
+    else {
+        Node* temp = getSuccessorNode(value);
+        target->info = temp->info;
+
+        // Remove the successor (note that the successor will always have at most one child)
+        Node* tempChild = temp->right;
+
+        if (temp->parent->left == temp) {
+            temp->parent->left = tempChild;
+        } else {
+            temp->parent->right = tempChild;
+        }
+
+        if (tempChild) {
+            tempChild->parent = temp->parent;
+        }
         delete temp;
     }
 
