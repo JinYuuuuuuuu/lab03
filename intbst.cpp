@@ -10,14 +10,14 @@ using std::cout;
 
 // constructor sets up empty tree
 IntBST::IntBST() { 
-    info = 0;
-    left = right = parent = nullptr;
+    //info = 0;
+    //left = right = parent = nullptr;
     root = nullptr;
 }
 
 // destructor deletes all nodes
 IntBST::~IntBST() {
-    clear();
+    clear(root);
 }
 
 // recursive helper for destructor
@@ -43,7 +43,7 @@ bool IntBST::insert(int value) {
 
 // recursive helper for insert (assumes n is never 0)
 bool IntBST::insert(int value, Node *n) {
-    if (curr->info == value){
+    if (n->info == value){
             return false;
     }
     else if (n->info > value) {
